@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Block-28, Dorm-11 Salutation Schedule Website</title>
+    <style>
+        :root {
+            --primary-color: #ff4757;
+            --dark-color: #2f3542;
+            --light-color: #f1f2f6;
+            --accent-color: #ffa502;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #dfe4ea;
+            color: var(--dark-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 750px;
+            width: 100%;
+            background: white;
+            padding: 35px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+            text-align: center;
+        }
+
+        h1 {
+            color: var(--dark-color);
+            font-size: 26px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+            border-bottom: 4px solid var(--primary-color);
+            padding-bottom: 15px;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .time-badge {
+            background-color: #374151;
+            color: #ffffff;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 25px;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        th {
+            background-color: var(--dark-color);
+            color: white;
+            padding: 18px;
+            font-size: 16px;
+            text-transform: uppercase;
+        }
+
+        td {
+            padding: 18px;
+            border-bottom: 1px solid #ced6e0;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        tr:nth-child(even) {
+            background-color: var(--light-color);
+        }
+
+        .selected-cleaner {
+            background-color: #fffae6 !important;
+        }
+
+        .badge-winner {
+            background-color: var(--accent-color);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            box-shadow: 0 3px 8px rgba(255, 165, 2, 0.4);
+            display: inline-block;
+        }
+
+        .badge-normal {
+            background-color: #747d8c;
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            display: inline-block;
+            opacity: 0.6;
+        }
+
+        .footer {
+            margin-top: 35px;
+            padding-top: 15px;
+            border-top: 1px solid #e2e8f0;
+            font-size: 13px;
+            color: #747d8c;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Block-28, Dorm-11 Salutation Schedule Website</h1>
+    <div class="time-badge">🕒 Cleaning Time: Morning 1:00 Every Day</div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Calendar (Date)</th>
+                <th>Cleaners</th>
+            </tr>
+        </thead>
+        <tbody id="schedule-table">
+            <!-- Data dynamically loads here -->
+        </tbody>
+    </table>
+
+    <div class="footer">
+        © 2026 Dorm-11 | Web Designer: <b>Badri Sheikh Mohammed</b>
+    </div>
+</div>
+
+<script>
+    const namoota = ["Gudeta", "Robsan", "Abdi", "Mohammed"];
+
+    function seedRandom(seed) {
+        let x = Math.sin(seed) * 10000;
+        return x - Math.floor(x);
+    }
+
+    function shuffleWithSeed(array, seed) {
+        let m = array.length, t, i;
+        let localArray = [...array];
+        for (i = 0; i < m; i++) {
+            let r = Math.floor(seedRandom(seed + i) * m);
+            t = localArray[i];
+            localArray[i] = localArray[r];
+            localArray[r] = t;
+        }
+        return localArray;
+    }
+
+    function generateCalendarSchedule() {
+        const tableBody = document.getElementById("schedule-table");
+        tableBody.innerHTML = "";
+
+        let startDate = new Date(2026, 9, 21);
+        let systemToday = new Date();
+        let currentYear = systemToday.getFullYear();
+        
+        let baseDate = (currentYear === 2026 && systemToday > startDate) ? systemToday : startDate;
+        let currentDayTimestamp = Math.floor(baseDate.getTime() / (1000 * 60 * 60 * 24));
+        
+        let shuffledNames = shuffleWithSeed(namoota, currentDayTimestamp);
+
+        for (let i = 0; i < 4; i++) {
+            let row = document.createElement("tr");
+
+            let currentDate = new Date(startDate);
+            currentDate.setDate(startDate.getDate() + (i * 2));
+
+            let options = { year: 'numeric', month: 'short', day: 'numeric', weekday: 'long' };
+            let formattedDate = currentDate.toLocaleDateString("en-US", options);
+
+            let isSelected = (i === 0);
+            let badgeClass = isSelected ? 'class="badge-winner"' : 'class="badge-normal"';
+
+            row.innerHTML = `
+                <td style="text-align: left; padding-left: 25px;">📅 ${formattedDate}</td>
+                <td><span ${badgeClass}>${shuffledNames[i]}</span></td>
+            `;
+
+            if (isSelected) {
+                row.className = "selected-cleaner";
+            }
+
+            tableBody.appendChild(row);
+        }
+    }
+
+    window.onload = generateCalendarSchedule;
+</script>
+
+</body>
+</html>
